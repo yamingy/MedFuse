@@ -29,12 +29,12 @@ try:
 except:
     pass
 
-patients = read_patients_table(f'{args.mimic3_path}/core/patients.csv')
+patients = read_patients_table(f'{args.mimic3_path}/hosp/patients.csv.gz')
 
-admits = read_admissions_table(f'{args.mimic3_path}/core/admissions.csv')
+admits = read_admissions_table(f'{args.mimic3_path}/hosp/admissions.csv.gz')
 
 
-stays = read_icustays_table(f'{args.mimic3_path}/icu/icustays.csv')
+stays = read_icustays_table(f'{args.mimic3_path}/icu/icustays.csv.gz')
 if args.verbose:
     print('START:\n\tstay_ids: {}\n\thadm_ids: {}\n\tsubject_ids: {}'.format(stays.stay_id.unique().shape[0],
           stays.hadm_id.unique().shape[0], stays.subject_id.unique().shape[0]))

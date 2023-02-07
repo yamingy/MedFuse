@@ -6,6 +6,7 @@ import numpy as np
 import os
 import pandas as pd
 from tqdm import tqdm
+import gzip
 
 from mimic3benchmark.util import dataframe_from_csv
 
@@ -41,10 +42,10 @@ def read_icustays_table(path):
 
 def read_icd_diagnoses_table(path):
 
-    codes = pd.read_csv(f'{path}/d_icd_diagnoses.csv')
+    codes = pd.read_csv(f'{path}/d_icd_diagnoses.csv.gz')
     # dataframe_from_csv(os.path.join(mimic3_path, 'D_ICD_DIAGNOSES.csv'))
     codes = codes[['icd_code', 'long_title']]
-    diagnoses = pd.read_csv(f'{path}/diagnoses_icd.csv')
+    diagnoses = pd.read_csv(f'{path}/diagnoses_icd.csv.gz')
     diagnoses = diagnoses.merge(codes, how='inner', left_on='icd_code', right_on='icd_code')
     diagnoses[['subject_id', 'hadm_id', 'seq_num']] = diagnoses[['subject_id', 'hadm_id', 'seq_num']].astype(int)
     return diagnoses
@@ -52,9 +53,9 @@ def read_icd_diagnoses_table(path):
 
 def read_events_table_by_row(mimic3_path, table):
     nb_rows = {'chartevents': 329499788, 'labevents': 122103667, 'outputevents': 4457381}
-    csv_files = {'chartevents': 'icu/chartevents.csv', 'labevents': 'hosp/labevents.csv', 'outputevents': 'icu/outputevents.csv'}
+    csv_files = {'chartevents': 'icu/chartevents.csv.gz', 'labevents': 'hosp/labevents.csv.gz', 'outputevents': 'icu/outputevents.csv.gz'}
     # nb_rows = {'chartevents': 330712484, 'labevents': 27854056, 'outputevents': 4349219}
-    reader = csv.DictReader(open(os.path.join(mimic3_path, csv_files[table.lower()]), 'r'))
+    reader = csv.DictReader(gzip.open(os.path.join(mimic3_path, csv_files[table.lower()]), 'r'))
     for i, row in enumerate(reader):
         if 'stay_id' not in row:
             row['stay_id'] = ''
