@@ -54,9 +54,16 @@ def process_partition(args, partition, sample_rate=1.0, shortest_length=4.0,
                 else:
                     # lived_time = (datetime.strptime(deathtime, "%Y-%m-%d %H:%M:%S") -
                     #               datetime.strptime(intime, "%Y-%m-%d %H:%M:%S")).total_seconds() / 3600.0
-                    lived_time =  (
-                        datetime.strptime(deathtime, "%Y-%m-%d %H:%M:%S") - datetime.strptime(intime, "%Y-%m-%d")
-                    ).total_seconds() / 3600.0 #%Y-%m-%d %H:%M:%S
+                    # solution proposed by: https://github.com/YerevaNN/mimic3-benchmarks/issues/103
+                    try:
+                        dt = datetime.strptime(deathtime, "%Y-%m-%d %H:%M:%S")
+                    except:
+                        dt = datetime.strptime(deathtime, "%Y-%m-%d")
+                    try:
+                        it = datetime.strptime(intime, "%Y-%m-%d %H:%M:%S")
+                    except:
+                        it = datetime.strptime(intime, "%Y-%m-%d")
+                    lived_time = (dt -it).total_seconds() / 3600.0
 
 
                 ts_lines = tsfile.readlines()
