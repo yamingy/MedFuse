@@ -52,8 +52,12 @@ def process_partition(args, partition, sample_rate=1.0, shortest_length=4.0,
                 if pd.isnull(deathtime):
                     lived_time = 1e18
                 else:
-                    lived_time = (datetime.strptime(deathtime, "%Y-%m-%d %H:%M:%S") -
-                                  datetime.strptime(intime, "%Y-%m-%d %H:%M:%S")).total_seconds() / 3600.0
+                    # lived_time = (datetime.strptime(deathtime, "%Y-%m-%d %H:%M:%S") -
+                    #               datetime.strptime(intime, "%Y-%m-%d %H:%M:%S")).total_seconds() / 3600.0
+                    lived_time =  (
+                        datetime.strptime(deathtime, "%Y-%m-%d %H:%M:%S") - datetime.strptime(intime, "%Y-%m-%d")
+                    ).total_seconds() / 3600.0 #%Y-%m-%d %H:%M:%S
+
 
                 ts_lines = tsfile.readlines()
                 header = ts_lines[0]
