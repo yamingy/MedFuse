@@ -55,7 +55,7 @@ def read_events_table_by_row(mimic3_path, table):
     nb_rows = {'chartevents': 329499788, 'labevents': 122103667, 'outputevents': 4457381}
     csv_files = {'chartevents': 'icu/chartevents.csv.gz', 'labevents': 'hosp/labevents.csv.gz', 'outputevents': 'icu/outputevents.csv.gz'}
     # nb_rows = {'chartevents': 330712484, 'labevents': 27854056, 'outputevents': 4349219}
-    reader = csv.DictReader(gzip.open(os.path.join(mimic3_path, csv_files[table.lower()]), 'r'))
+    reader = csv.DictReader(gzip.open(os.path.join(mimic3_path, csv_files[table.lower()]), 'rt'))
     for i, row in enumerate(reader):
         if 'stay_id' not in row:
             row['stay_id'] = ''
